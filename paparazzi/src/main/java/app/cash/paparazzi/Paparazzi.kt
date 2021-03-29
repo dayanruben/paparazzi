@@ -129,7 +129,7 @@ class Paparazzi(
         .withTheme(theme)
 
     val sessionParams = sessionParamsBuilder.build()
-    renderSession = createRenderSession(sessionParams)
+    renderSession = RenderSessionImpl(sessionParams)
     prepareThread()
     renderSession.init(sessionParams.timeout)
 
@@ -215,7 +215,7 @@ class Paparazzi(
       }
 
       val sessionParams = sessionParamsBuilder.build()
-      renderSession = createRenderSession(sessionParams)
+      renderSession = RenderSessionImpl(sessionParams)
       renderSession.init(sessionParams.timeout)
       bridgeRenderSession = createBridgeSession(renderSession, renderSession.inflate())
     }
@@ -225,12 +225,13 @@ class Paparazzi(
     val frameHandler = snapshotHandler.newFrameHandler(snapshot, frameCount, fps)
     frameHandler.use {
       val viewGroup = bridgeRenderSession.rootViews[0].viewObject as ViewGroup
+      viewGroup.addView(view)
+
       try {
         withTime(0L) {
           // Initialize the choreographer at time=0.
         }
 
-        viewGroup.addView(view)
         for (frame in 0 until frameCount) {
           val nowNanos = (startNanos + (frame * 1_000_000_000.0 / fps)).toLong()
           withTime(nowNanos) {
@@ -262,7 +263,7 @@ class Paparazzi(
     // Execute the block at the requested time.
 //    System_Delegate.setBootTimeNanos(frameNanos)
     System_Delegate.setNanosTime(frameNanos)
-    Choreographer.getInstance().doFrame(frameNanos, 0)
+//    Choreographer.getInstance().doFrame(frameNanos, 0)
     try {
       block()
     } finally {

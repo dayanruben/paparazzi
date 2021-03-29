@@ -19,6 +19,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.Choreographer
 import android.view.Choreographer.CALLBACK_ANIMATION
 import android.view.View
@@ -62,14 +63,18 @@ class PaparazziTest {
         log += "onAnimationEnd time=$time animationElapsed=${animator.animatedValue}"
       }
     })
-    animator.addUpdateListener {
-      log += "onAnimationUpdate time=$time animationElapsed=${animator.animatedValue}"
-    }
 
     val view = object : View(paparazzi.context) {
       override fun onDraw(canvas: Canvas) {
         log += "onDraw time=$time animationElapsed=${animator.animatedValue}"
       }
+    }
+
+    animator.addUpdateListener {
+      log += "onAnimationUpdate time=$time animationElapsed=${animator.animatedValue}"
+
+      val colorComponent = it.animatedFraction
+      view.setBackgroundColor(Color.argb(1f, colorComponent, colorComponent, colorComponent))
     }
 
     animator.startDelay = 2_000L
@@ -81,9 +86,6 @@ class PaparazziTest {
 
     assertThat(log).containsExactly(
         "onDraw time=1000 animationElapsed=0.0",
-        "onDraw time=1250 animationElapsed=0.0",
-        "onDraw time=1500 animationElapsed=0.0",
-        "onDraw time=1750 animationElapsed=0.0",
         "onAnimationStart time=2000 animationElapsed=0.0",
         "onAnimationUpdate time=2000 animationElapsed=0.0",
         "onDraw time=2000 animationElapsed=0.0",
@@ -96,10 +98,6 @@ class PaparazziTest {
         "onAnimationUpdate time=3000 animationElapsed=1.0",
         "onAnimationEnd time=3000 animationElapsed=1.0",
         "onDraw time=3000 animationElapsed=1.0",
-        "onDraw time=3250 animationElapsed=1.0",
-        "onDraw time=3500 animationElapsed=1.0",
-        "onDraw time=3750 animationElapsed=1.0",
-        "onDraw time=4000 animationElapsed=1.0"
     )
   }
 
@@ -110,12 +108,32 @@ class PaparazziTest {
     val view = object : View(paparazzi.context) {
       override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        log += "onAttachedToWindow: view width=${width} height=${height}"
         Choreographer.getInstance()
             .postCallback(
                 CALLBACK_ANIMATION,
                 { log += "view width=${width} height=${height}" },
                 false
             )
+      }
+
+      override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int
+      ) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        log += "onMeasure: view width=${width} height=${height}"
+      }
+
+      override fun onLayout(
+        changed: Boolean,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int
+      ) {
+        super.onLayout(changed, left, top, right, bottom)
+        log += "onLayout: view width=${width} height=${height}"
       }
     }
 
