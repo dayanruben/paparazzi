@@ -13,7 +13,7 @@ buildscript {
     jcodec: '0.2.5',
     moshi: '1.11.0',
     bytebuddy: '1.10.21',
-    releasedPaparazzi: '0.7.0'
+    releasedPaparazzi: '0.8.0-cash01'
   ]
 
   ext.deps = [
