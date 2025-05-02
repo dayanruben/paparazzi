@@ -19,7 +19,6 @@ import android.graphics.Rect
 import android.os.ext.util.SdkLevel
 import android.view.Gravity
 import android.view.View
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.WindowManager
@@ -41,6 +40,7 @@ import androidx.compose.ui.semantics.getAllSemanticsNodes
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.core.view.isVisible
 import app.cash.paparazzi.RenderExtension
 import app.cash.paparazzi.internal.ComposeViewAdapter
 import com.android.internal.view.OneShotPreDrawListener
@@ -94,7 +94,7 @@ public class AccessibilityRenderExtension : RenderExtension {
 
   private fun View.processAccessibleChildren(processElement: (AccessibilityElement) -> Unit) {
     val accessibilityText = this.accessibilityText()
-    if (isImportantForAccessibility && !accessibilityText.isNullOrBlank() && visibility == VISIBLE) {
+    if (isImportantForAccessibility && !accessibilityText.isNullOrBlank() && isVisible) {
       val bounds = Rect().also(::getBoundsOnScreen)
 
       processElement(
@@ -106,7 +106,7 @@ public class AccessibilityRenderExtension : RenderExtension {
       )
     }
 
-    if (this is AbstractComposeView && visibility == VISIBLE) {
+    if (this is AbstractComposeView && isVisible) {
       // ComposeView creates a child view `AndroidComposeView` for view root for test.
       val viewRoot = getChildAt(0) as ViewRootForTest
       val unmergedNodes = viewRoot.semanticsOwner.getAllSemanticsNodes(false)
@@ -262,6 +262,8 @@ public class AccessibilityRenderExtension : RenderExtension {
       "$CUSTOM_ACTION_LABEL: ${action.label}"
     }
 
+    val isInList = parent?.config?.getOrNull(SemanticsProperties.CollectionInfo)?.let { IN_LIST_LABEL }
+
     return constructTextList(
       stateDescription,
       selected,
@@ -277,13 +279,24 @@ public class AccessibilityRenderExtension : RenderExtension {
       setProgress,
       liveRegionMode,
       annotatedStringActions,
-      customActions
+      customActions,
+      isInList
     )
   }
 
   private fun View.accessibilityText(): String? {
     val nodeInfo = createAccessibilityNodeInfo()
     onInitializeAccessibilityNodeInfo(nodeInfo)
+
+    val parentView = parent?.let { it as? View }
+    val isInList = if (parentView != null && parentView.isImportantForAccessibility) {
+      val parentNodeInfo = createAccessibilityNodeInfo()
+      parentView.onInitializeAccessibilityNodeInfo(parentNodeInfo)
+
+      parentNodeInfo.collectionInfo?.let { IN_LIST_LABEL }
+    } else {
+      null
+    }
 
     val stateDescription = if (SdkLevel.isAtLeastR()) stateDescription?.toString() else null
     val selected = if (isSelected) SELECTED_LABEL else null
@@ -315,7 +328,8 @@ public class AccessibilityRenderExtension : RenderExtension {
       disabled,
       heading,
       liveRegionMode,
-      customActions
+      customActions,
+      isInList
     )
   }
 
@@ -366,6 +380,7 @@ public class AccessibilityRenderExtension : RenderExtension {
     private const val LIVE_REGION_ASSERTIVE_LABEL = "assertive"
     private const val LIVE_REGION_POLITE_LABEL = "polite"
     private const val EDITABLE_LABEL = "<editable>"
+    private const val IN_LIST_LABEL = "<in-list>"
   }
 }
 
