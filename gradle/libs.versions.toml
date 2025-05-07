@@ -37,7 +37,7 @@ guava = { module = "com.google.guava:guava", version = "33.4.8-jre" }
 
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version = "2.1.0" }
-kotlin-compile-testing-ksp = { module = "dev.zacsweers.kctfork:ksp", version = "0.7.0" }
+kotlin-compile-testing-ksp = { module = "dev.zacsweers.kctfork:ksp", version = "0.7.1" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
@@ -73,7 +73,7 @@ truth = { module = "com.google.truth:truth", version = "1.4.4" }
 
 # Plugins
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "5.6.4" }
+plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "5.6.5" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.0.0" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
