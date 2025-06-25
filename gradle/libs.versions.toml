@@ -1,6 +1,6 @@
 [versions]
-agp = "8.10.1"
-androidTools = "31.10.1" # == 23.0.0 + agp version
+agp = "8.11.0"
+androidTools = "31.11.0" # == 23.0.0 + agp version
 bytebuddy = "1.17.6"
 compose = "1.8.3"
 coroutines = "1.10.2"
@@ -59,7 +59,7 @@ okio = { module = "com.squareup.okio:okio", version = "3.13.0" }
 
 tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
 tools-layoutlib = { module = "com.android.tools.layoutlib:layoutlib", version.ref = "layoutlib" }
-tools-layoutlib-api = { module = "com.android.tools.layoutlib:layoutlib-api", version = "31.11.0-rc02" }
+tools-layoutlib-api = { module = "com.android.tools.layoutlib:layoutlib-api", version = "31.11.0" }
 tools-layoutlib-resources = { module = "com.android.tools.layoutlib:layoutlib-resources", version.ref = "layoutlib" }
 tools-layoutlib-runtime = { module = "com.android.tools.layoutlib:layoutlib-runtime", version.ref = "layoutlib" }
 tools-ninepatch = { module = "com.android.tools:ninepatch", version.ref = "androidTools" }
@@ -78,7 +78,7 @@ plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version 
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.0.0" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
-plugin-kotlinApiDump = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version = '0.17.0' }
+plugin-kotlinApiDump = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version = '0.18.0' }
 plugin-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.33.0" }
 plugin-poko = { module = "dev.drewhamilton.poko:poko-gradle-plugin", version = "0.18.7" }
