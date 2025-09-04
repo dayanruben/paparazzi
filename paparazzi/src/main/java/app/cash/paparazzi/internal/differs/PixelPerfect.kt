@@ -1,12 +1,13 @@
-package app.cash.paparazzi.internal
+package app.cash.paparazzi.internal.differs
 
-import app.cash.paparazzi.internal.Differ.DiffResult
+import app.cash.paparazzi.Differ
+import app.cash.paparazzi.Differ.DiffResult
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_ARGB
 import kotlin.math.abs
 import kotlin.math.max
 
-internal object OffByTwo : Differ {
+internal object PixelPerfect : Differ {
   override fun compare(expected: BufferedImage, actual: BufferedImage): DiffResult {
     val expectedWidth = expected.width
     val expectedHeight = expected.height
@@ -22,7 +23,6 @@ internal object OffByTwo : Differ {
 
     // Compute delta map
     var delta: Long = 0
-    var similarPixels: Long = 0
     var differentPixels: Long = 0
     for (y in 0 until maxHeight) {
       for (x in 0 until maxWidth) {
@@ -49,24 +49,19 @@ internal object OffByTwo : Differ {
           continue
         }
 
-        val deltaR = (actualRgb and 0xFF0000).ushr(16) - (expectedRgb and 0xFF0000).ushr(16)
-        val deltaG = (actualRgb and 0x00FF00).ushr(8) - (expectedRgb and 0x00FF00).ushr(8)
-        val deltaB = (actualRgb and 0x0000FF) - (expectedRgb and 0x0000FF)
+        differentPixels++
 
+        val deltaR = (actualRgb and 0xFF0000).ushr(16) - (expectedRgb and 0xFF0000).ushr(16)
         val newR = 128 + deltaR and 0xFF
+        val deltaG = (actualRgb and 0x00FF00).ushr(8) - (expectedRgb and 0x00FF00).ushr(8)
         val newG = 128 + deltaG and 0xFF
+        val deltaB = (actualRgb and 0x0000FF) - (expectedRgb and 0x0000FF)
         val newB = 128 + deltaB and 0xFF
+
         val avgAlpha =
           ((expectedRgb and -0x1000000).ushr(24) + (actualRgb and -0x1000000).ushr(24)) / 2 shl 24
+
         val newRGB = avgAlpha or (newR shl 16) or (newG shl 8) or newB
-
-        if (abs(deltaR) <= 2 && abs(deltaG) <= 2 && abs(deltaB) <= 2) {
-          similarPixels++
-          deltaImage.setRGB(expectedWidth + x, y, 0xFF0000FF.toInt())
-          continue
-        }
-
-        differentPixels++
         deltaImage.setRGB(expectedWidth + x, y, newRGB)
 
         delta += abs(deltaR).toLong()
@@ -84,21 +79,22 @@ internal object OffByTwo : Differ {
 
     // 3 different colors, 256 color levels
     val total = actualHeight.toLong() * actualWidth.toLong() * 3L * 256L
-    val percentDifference = (delta * 100 / total.toDouble()).toFloat()
+    var percentDifference = (delta * 100 / total.toDouble()).toFloat()
 
-    return if (differentPixels > 0) {
+    // If the delta diff is all black pixels, the computed difference is 0, but there are still
+    // different pixels. We can fallback to the amount of different pixels to less precise difference to ensure difference is reported.
+    if (differentPixels > 0 && percentDifference == 0f) {
+      percentDifference = differentPixels * 100 / (actualWidth * actualHeight.toDouble()).toFloat()
+    }
+
+    return if (percentDifference == 0f) {
+      DiffResult.Identical(delta = deltaImage)
+    } else {
       DiffResult.Different(
         delta = deltaImage,
         percentDifference = percentDifference,
         numDifferentPixels = differentPixels
       )
-    } else if (similarPixels > 0) {
-      DiffResult.Similar(
-        delta = deltaImage,
-        numSimilarPixels = similarPixels
-      )
-    } else {
-      DiffResult.Identical(delta = deltaImage)
     }
   }
 }
