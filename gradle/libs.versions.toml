@@ -1,8 +1,8 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.1"
 androidTools = "31.13.1" # == 23.0.0 + agp version
 bytebuddy = "1.18.1"
-compose = "1.9.4"
+compose = "1.9.5"
 coroutines = "1.10.2"
 javaTarget = "17"
 kotlin = "2.2.10"
@@ -16,9 +16,9 @@ compileSdk = "36"
 [libraries]
 androidx-annotations = { module = "androidx.annotation:annotation", version = "1.9.1" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
-androidx-activity = { module = "androidx.activity:activity", version = "1.11.0" }
+androidx-activity = { module = "androidx.activity:activity", version = "1.12.0" }
 androidx-compose-ui-android = { module = "androidx.compose.ui:ui-android", version.ref = "compose" }
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-android", version = "2.9.4" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-android", version = "2.10.0" }
 androidx-savedstate = { module = "androidx.savedstate:savedstate-android", version = "1.4.0" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
 
@@ -59,7 +59,7 @@ okio = { module = "com.squareup.okio:okio", version = "3.16.4" }
 
 tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
 tools-layoutlib = { module = "com.android.tools.layoutlib:layoutlib", version.ref = "layoutlib" }
-tools-layoutlib-api = { module = "com.android.tools.layoutlib:layoutlib-api", version = "31.13.0" }
+tools-layoutlib-api = { module = "com.android.tools.layoutlib:layoutlib-api", version = "31.13.1" }
 tools-layoutlib-resources = { module = "com.android.tools.layoutlib:layoutlib-resources", version.ref = "layoutlib" }
 tools-layoutlib-runtime = { module = "com.android.tools.layoutlib:layoutlib-runtime", version.ref = "layoutlib" }
 tools-ninepatch = { module = "com.android.tools:ninepatch", version.ref = "androidTools" }
@@ -74,7 +74,7 @@ truth = { module = "com.google.truth:truth", version = "1.4.5" }
 
 # Plugins
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "5.7.1" }
+plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "6.0.0" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.1.0" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
