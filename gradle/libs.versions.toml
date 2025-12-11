@@ -38,7 +38,7 @@ guava = { module = "com.google.guava:guava", version = "33.5.0-jre" }
 
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version = "2.2.0" }
-kotlin-compile-testing-ksp = { module = "dev.zacsweers.kctfork:ksp", version = "0.8.0" }
+kotlin-compile-testing-ksp = { module = "dev.zacsweers.kctfork:ksp", version = "0.11.1" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
@@ -69,7 +69,7 @@ trove4j = { module = "org.jetbrains.intellij.deps:trove4j", version = "1.0.20200
 
 # Test libraries
 junit = { module = "junit:junit", version = "4.13.2" }
-testParameterInjector = { module = "com.google.testparameterinjector:test-parameter-injector", version = "1.19" }
+testParameterInjector = { module = "com.google.testparameterinjector:test-parameter-injector", version = "1.20" }
 truth = { module = "com.google.truth:truth", version = "1.4.5" }
 
 # Plugins
