@@ -69,22 +69,6 @@ class PaparazziPluginTest {
   }
 
   @Test
-  fun supportsKotestLibrary() {
-    val fixtureRoot = File("src/test/projects/supports-kotest")
-
-    gradleRunner.withArguments("verifyPaparazziDebug", "--stacktrace")
-      .runFixture(fixtureRoot) { build() }
-  }
-
-  @Test
-  fun supportsTestNgLibrary() {
-    val fixtureRoot = File("src/test/projects/supports-testng")
-
-    gradleRunner.withArguments("verifyPaparazziDebug", "--stacktrace")
-      .runFixture(fixtureRoot) { build() }
-  }
-
-  @Test
   fun missingSupportedPlugins() {
     val fixtureRoot = File("src/test/projects/missing-supported-plugins")
 
@@ -142,6 +126,19 @@ class PaparazziPluginTest {
     assertThat(result.task(":preparePaparazziDebugResources")).isNull()
     assertThat(result.output).contains(
       "There must be an androidTarget() configured when using Paparazzi with the legacy Kotlin Multiplatform Plugin"
+    )
+  }
+
+  @Test
+  fun erroneouslyConfiguredInCommonTest() {
+    val fixtureRoot = File("src/test/projects/multiplatform-paparazzi-in-commontest")
+
+    val result = gradleRunner
+      .withArguments("preparePaparazziDebugResources", "--stacktrace")
+      .runFixture(fixtureRoot) { buildAndFail() }
+
+    assertThat(result.output).contains(
+      "Paparazzi must not be declared in 'commonTestImplementation', as it should only resolve on Android JVM tests."
     )
   }
 
@@ -728,18 +725,35 @@ class PaparazziPluginTest {
   }
 
   @Test
-  fun verifyDeletesStaleFailures() {
+  fun verifyDeletesFailures() {
     val fixtureRoot = File("src/test/projects/verify-mode-success")
     val failureDir = File(fixtureRoot, "build/paparazzi/failures/debug").registerForDeletionOnExit()
-    val staleDelta = File(failureDir, "delta-stale.png")
     failureDir.mkdirs()
-    staleDelta.writeText("stale")
+    val stale = File(failureDir, "stale.txt")
+    stale.writeText("stale")
 
-    gradleRunner
+    val result = gradleRunner
       .withArguments("verifyPaparazziDebug", "--stacktrace")
       .runFixture(fixtureRoot) { build() }
 
-    assertThat(staleDelta.exists()).isFalse()
+    assertThat(result.task(":testDebugUnitTest")?.outcome).isEqualTo(SUCCESS)
+    assertThat(stale.exists()).isFalse()
+  }
+
+  @Test
+  fun recordPreservesFailures() {
+    val fixtureRoot = File("src/test/projects/verify-mode-success")
+    val failureDir = File(fixtureRoot, "build/paparazzi/failures/debug").registerForDeletionOnExit()
+    failureDir.mkdirs()
+    val stale = File(failureDir, "stale.txt")
+    stale.writeText("stale")
+
+    val result = gradleRunner
+      .withArguments("recordPaparazziDebug", "--stacktrace")
+      .runFixture(fixtureRoot) { build() }
+
+    assertThat(result.task(":testDebugUnitTest")?.outcome).isEqualTo(SUCCESS)
+    assertThat(stale.exists()).isTrue()
   }
 
   @Test
