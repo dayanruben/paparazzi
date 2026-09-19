@@ -1,7 +1,7 @@
 [versions]
 agp = "9.0.0"
 androidTools = "32.0.0" # == 23.0.0 + agp version
-bytebuddy = "1.18.13"
+bytebuddy = "1.18.14"
 compose = "1.11.2"
 coroutines = "1.11.0"
 javaTarget = "21"
@@ -56,7 +56,7 @@ moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "
 moshi-core = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlinReflect = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
-okio = { module = "com.squareup.okio:okio", version = "3.17.0" }
+okio = { module = "com.squareup.okio:okio", version = "3.18.2" }
 
 tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
 tools-layoutlib = { module = "com.android.tools.layoutlib:layoutlib", version.ref = "layoutlib" }
@@ -80,7 +80,7 @@ truth = { module = "com.google.truth:truth", version = "1.4.5" }
 
 # Plugins
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "6.1.0" }
+plugin-buildConfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "6.1.1" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
