@@ -59,6 +59,7 @@ import org.gradle.internal.operations.BuildOperationRunner
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 import org.gradle.util.GradleVersion
+import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.util.Locale
@@ -369,6 +370,7 @@ public class PaparazziPlugin @Inject constructor(
       }
     }
 
+  @DisableCachingByDefault(because = "Lifecycle task that only forwards --tests to the Test tasks")
   public abstract class PaparazziTask : DefaultTask() {
     @Option(option = "tests", description = "Sets test class or method name to be included, '*' is supported.")
     public open fun setTestNameIncludePatterns(testNamePattern: List<String>): PaparazziTask {
@@ -598,7 +600,7 @@ public class PaparazziPlugin @Inject constructor(
   }
 }
 
-private const val DEFAULT_COMPILE_SDK_VERSION = 36
+private const val DEFAULT_COMPILE_SDK_VERSION = 37
 private const val ANDROID_KOTLIN_MULTIPLATFORM_LIBRARY_PLUGIN = "com.android.kotlin.multiplatform.library"
 private const val KOTLIN_MULTIPLATFORM_PLUGIN = "org.jetbrains.kotlin.multiplatform"
 private val MIN_NATIVE_REPORT_GRADLE_VERSION = GradleVersion.version("9.4")
